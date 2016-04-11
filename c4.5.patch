@@ -1,0 +1,69 @@
+diff -ru R8/Src/average.c R8fixed/Src/average.c
+--- R8/Src/average.c	1999-07-19 12:48:59.000000000 +0200
++++ R8fixed/Src/average.c	2016-03-18 11:17:21.000000000 +0100
+@@ -10,6 +10,7 @@
+ 
+ 
+ #include <stdio.h>
++#include <stdlib.h>
+ 
+ #define	MAXLINE		200	/* max line length */
+ #define MAXVALS		 10	/* max values to be averaged */
+@@ -48,7 +49,7 @@
+ 
+ 	if ( Lines )
+ 	{
+-	    if ( i != Numbers ) exit();
++	    if ( i != Numbers ) exit(1);
+ 	}
+ 	else
+ 	{
+diff -ru R8/Src/xval-prep.c R8fixed/Src/xval-prep.c
+--- R8/Src/xval-prep.c	1995-10-10 02:19:53.000000000 +0100
++++ R8fixed/Src/xval-prep.c	2016-03-18 11:17:56.000000000 +0100
+@@ -13,6 +13,8 @@
+ 
+ #include <math.h>
+ #include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
+ 
+ 
+ long	random();
+diff -ru R8/Src/xval.sh R8fixed/Src/xval.sh
+--- R8/Src/xval.sh	1995-10-10 02:19:53.000000000 +0100
++++ R8fixed/Src/xval.sh	2016-03-18 13:11:30.000000000 +0100
+@@ -1,4 +1,4 @@
+-#csh
++#!/bin/csh
+ 
+ #---------------------------------------------------------------------
+ # N-way cross-validation script
+@@ -53,10 +53,14 @@
+ 
+ #	prepare the data for cross-validation
+ 
+-cat $1.data $1.test | xval-prep $2 >XDF.data
++ls $1.test >& /dev/null
++if ( $status == 0 ) then
++  cat $1.data $1.test | xval-prep $2 >XDF.data2>/dev/null
++else
++  cat $1.data | xval-prep $2 >XDF.data
++endif
+ cp /dev/null XDF.test
+ ln $1.names XDF.names
+-rm $1.[rt]o[0-9]*$suffix
+ set junk = `wc XDF.data`
+ set examples = $junk[1]
+ set large = `expr $examples % $2`
+@@ -79,6 +83,9 @@
+ 
+ #	remove the temporary files and summarize results
+ 
+-rm -f XDF.*
+ cat $1.to[0-9]*$suffix | grep "<<" | average >$1.tres$suffix
+ cat $1.ro[0-9]*$suffix | grep "<<" | average >$1.rres$suffix
++rm -f XDF.*
++rm $1.[rt]o[0-9]*$suffix
++echo
++tail -n 3 $1.[tr]res$suffix
