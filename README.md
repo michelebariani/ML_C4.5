@@ -1,9 +1,19 @@
-# ML_C4.5
-Quick and easy build for both C4.5 and C5.0 ML algorithms (by John Ross Quinlan) for a hands-on experience
+ml_c4.5
+----
 
-Building this image downloads and compiles the code from http://www.rulequest.com. A patch is applied to the no more maintained C4.5 code (to make it compile at least).
+A Dockerfile setting up executables for both C4.5 and C5.0 Machine Learning algorithms (by [John Ross Quinlan][1]) for hands-on experience.
 
-Please refer to http://www.rulequest.com for use restriction and code licensing applying to C4.5 and C5.0.
+Upon build, source code is downloaded from [RuleQuest Research][2], then a patch is applied to the no more maintained C4.5 code (to have at least no fatal errors on compile).
+Please refer to [RuleQuest Research][2] for C4.5 and C5.0 use restriction and code licensing.
 
-My own licensing obviously refers just to my contribution (patch and Dockerfile)
+
+Run the container
+-----------------
+The container is meant for interactive use:
+
+     docker run -it mbariani/ml_c4.5
+
+
+[1]: https://en.wikipedia.org/wiki/Ross_Quinlan
+[2]: http://www.rulequest.com
 
